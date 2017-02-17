@@ -72,6 +72,7 @@ body {
 </style>
 
 <div class="timeliner">
+    <button v-on:click='dumpData()'>Dump Data</button>
     <button v-on:click='addBox()'>Add Box</button>
     <button v-on:click='removeBox()'>Remove Box</button>
     <br/>
@@ -89,7 +90,7 @@ body {
 </div>
 <script src="timeliner.js"></script>
 <script>
-var app = new Vue({
+var timeliner = new Vue({
   // app initial state
   data: {
     boxes:[],
@@ -200,7 +201,43 @@ var app = new Vue({
         this.animArea.style.height = (bottom - top) + 'px';
         console.log('SETTTTTTT', left, right, top, bottom);
         
-    }
+    },
+
+    dumpData() {
+        const timelinerData = window._timeliner_data.getJSONString();
+        const data = {
+            area:this.area,
+            timeliner:JSON.parse(timelinerData)
+        }
+		let json = JSON.stringify(data);
+		var ret = prompt('Hit OK to download otherwise Copy and Paste JSON', json);
+		if (!ret) return;
+		json = JSON.stringify(data, 0, 2);
+
+		let fileName = 'animdump.json';
+		this.saveToFile(json, fileName);
+    },
+
+    saveToFile(string, filename) {
+	    var a = document.createElement("a");
+	    document.body.appendChild(a);
+	    a.style = "display: none";
+
+	    var blob = new Blob([string], { type: 'octet/stream' }), // application/json
+		    url = window.URL.createObjectURL(blob);
+	    
+	    a.href = url;
+	    a.download = filename;
+
+	    fakeClick(a);
+
+	    setTimeout(function() {
+		    // cleanup and revoke
+		    window.URL.revokeObjectURL(url);
+		    document.body.removeChild(a);
+	    }, 500);
+    },
+
 
 
   },
@@ -216,7 +253,7 @@ var app = new Vue({
 })
 
 
-app.$mount('.timeliner')
+timeliner.$mount('.timeliner')
 
 
 var box2 = document.getElementById("box2");

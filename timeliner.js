@@ -211,7 +211,7 @@ function Timeliner(target) {
 	this.layer_store = layer_store;
 	var layers = layer_store.value;
 
-	window._data = data; // expose it for debugging
+	window._timeliner_data = data; // expose it for debugging
 
 	// Undo manager
 	var undo_manager = new UndoManager(dispatcher);
