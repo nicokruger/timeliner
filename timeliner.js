@@ -208,6 +208,7 @@ function Timeliner(target) {
 	// Data
 	var data = new DataStore();
 	var layer_store = data.get('layers');
+	this.layer_store = layer_store;
 	var layers = layer_store.value;
 
 	window._data = data; // expose it for debugging
