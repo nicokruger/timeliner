@@ -74,6 +74,16 @@ body {
 <div class="timeliner">
     <button v-on:click='addBox()'>Add Box</button>
     <button v-on:click='removeBox()'>Remove Box</button>
+    <br/>
+    <div>Area</div>
+    <button v-on:click='area.right+=0.1; setAnimArea();'>W+</button>
+    <button v-on:click='area.right-=0.1; setAnimArea();'>W-</button>
+    <button v-on:click='area.bottom+=0.1; setAnimArea();'>H+</button>
+    <button v-on:click='area.bottom-=0.1; setAnimArea();'>H-</button>
+    <button v-on:click='area.left-=0.1; area.right-=0.1; setAnimArea();'>Left</button>
+    <button v-on:click='area.left+=0.1; area.right+=0.1; setAnimArea();'>Right</button>
+    <button v-on:click='area.top-=0.1; area.bottom-=0.1; setAnimArea();'>Up</button>
+    <button v-on:click='area.top+=0.1; area.bottom+=0.1; setAnimArea();'>Down</button>
     <div id="animarea" class="animarea">
     </div>
 </div>
@@ -97,6 +107,9 @@ var app = new Vue({
     this.addBox();
     this.animate();
     this.animArea = document.getElementById("animarea");
+    setTimeout( () => {
+        this.setAnimArea();
+    }, 500);
   },
 
   // computed properties
@@ -140,6 +153,15 @@ var app = new Vue({
         const box = this.boxes[this.boxes.length-1];
         box.parentNode.removeChild(box);
     },
+    convertX(x) {
+        return x * 100 + w2;
+    },
+    convertY(y) {
+        return y * 100 + h2;
+    },
+    convertAngle(x) {
+        return x * 50;
+    },
     animate() {
 	    requestAnimationFrame(this.animate);
 
@@ -149,13 +171,35 @@ var app = new Vue({
 	        const x = this.target[boxName + '_x'];
 	        const y = this.target[boxName + '_y'];
 	        const rotate = this.target[boxName + '_rot'];
-	        box.style.transform = 'translateX(' +  (x * 100 + w2) + 'px) translateY(' + (y * 100 + h2) + 'px) rotate(' + rotate * 50 + 'deg)';
+	        box.style.transform = 'translateX(' +  this.convertX(x) + 'px) translateY(' + this.convertY(y) + 'px) rotate(' +  this.convertAngle(x) + 'deg)';
 	    }
 
 
 	    //box2.style.transform = 'translateX(' +  (target.box2_x * 100 + w2) + 'px) translateY(' + (target.box2_y * 100 + h2) + 'px) rotate(' + target.box2_rotate * 50 + 'deg)'
     },
     setAnimArea() {
+    /*
+    area:{
+        top:-1,
+        bottom:1,
+        left:-1,
+        right:1
+    }
+    */
+
+        const left = this.convertX(this.area.left);
+        const right = this.convertX(this.area.right);
+        const top = this.convertY(this.area.top);
+        const bottom = this.convertY(this.area.bottom);
+
+        this.animArea.style.left = left + 'px';
+        this.animArea.style.right = right + 'px';
+        this.animArea.style.top = top + 'px';
+        this.animArea.style.bottom = bottom + 'px';
+        this.animArea.style.width = (right - left) + 'px';
+        this.animArea.style.height = (bottom - top) + 'px';
+        console.log('SETTTTTTT', left, right, top, bottom);
+        
     }
 
 
