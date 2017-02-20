@@ -444,6 +444,8 @@ function Timeliner(target) {
 	this.getData = function () {
 		return data;
 	}
+	this.load = load;
+
 	function save(name) {
 		if (!name) name = 'autosave';
 
