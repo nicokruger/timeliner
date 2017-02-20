@@ -441,6 +441,9 @@ function Timeliner(target) {
 		End Paint Routines
 	*/
 
+	this.getData = function () {
+		return data;
+	}
 	function save(name) {
 		if (!name) name = 'autosave';
 

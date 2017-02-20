@@ -99,7 +99,9 @@ var timeliner = new Vue({
         top:-1,
         bottom:1,
         left:-1,
-        right:1
+        right:1,
+        width:2,
+        height:2
     }
   },
 
@@ -172,26 +174,21 @@ var timeliner = new Vue({
 	        const x = this.target[boxName + '_x'];
 	        const y = this.target[boxName + '_y'];
 	        const rotate = this.target[boxName + '_rot'];
-	        box.style.transform = 'translateX(' +  this.convertX(x) + 'px) translateY(' + this.convertY(y) + 'px) rotate(' +  this.convertAngle(x) + 'deg)';
+	        //box.style.transform = 'translateX(' +  this.convertX(x) + 'px) translateY(' + this.convertY(y) + 'px) rotate(' +  this.convertAngle(rotate) + 'deg)';
+	        box.style.transform = 'translateX(0px) translateY(0px) rotate(' +  this.convertAngle(rotate) + 'deg)';
+	        box.style.left = this.convertX(x) + 'px';
+	        box.style.top = this.convertY(y) + 'px';
 	    }
 
 
-	    //box2.style.transform = 'translateX(' +  (target.box2_x * 100 + w2) + 'px) translateY(' + (target.box2_y * 100 + h2) + 'px) rotate(' + target.box2_rotate * 50 + 'deg)'
     },
     setAnimArea() {
-    /*
-    area:{
-        top:-1,
-        bottom:1,
-        left:-1,
-        right:1
-    }
-    */
-
         const left = this.convertX(this.area.left);
         const right = this.convertX(this.area.right);
         const top = this.convertY(this.area.top);
         const bottom = this.convertY(this.area.bottom);
+        this.area.width = this.area.right - this.area.left;
+        this.area.height = this.area.bottom - this.area.top;
 
         this.animArea.style.left = left + 'px';
         this.animArea.style.right = right + 'px';
@@ -204,13 +201,17 @@ var timeliner = new Vue({
     },
 
     dumpData() {
-        const timelinerData = window._timeliner_data.getJSONString();
+        //const timelinerData = window._timeliner_data.getJSONString();
+        const timelinerData = this.timeliner.getData().data;
+        console.log('got timeliner data', timelinerData);
         const data = {
             area:this.area,
-            timeliner:JSON.parse(timelinerData)
+            timeliner:timelinerData
         }
+        console.log('data', data);
 		let json = JSON.stringify(data);
-		var ret = prompt('Hit OK to download otherwise Copy and Paste JSON', json);
+		console.log('json', json);
+		var ret = prompt('Copy and Paste JSON', json);
 		if (!ret) return;
 		json = JSON.stringify(data, 0, 2);
 
