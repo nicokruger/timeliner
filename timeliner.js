@@ -545,6 +545,7 @@ function Timeliner(target) {
 	}
 
 	this.openLocalSave = open;
+	this.dispatcher = dispatcher;
 
 	dispatcher.on('import', function() {
 		promptImport();
